@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synthesis — Música & Tecnologia</title>
+  <meta name="description" content="Synthesis: um piano tocável no navegador, a história da música e a física do som.">
+
+  <!-- Marca que o JavaScript está ativo (as animações de entrada dependem disso).
+       Também liga o modo leve antes de a página aparecer: ele fica salvo no navegador
+       (botão "Modo leve" no menu) ou é forçado com ?lite na URL (?lite=0 desliga). -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var KEY = 'synthesis-lite';
+      root.classList.add('js');
+      try {
+        var params = new URLSearchParams(location.search);
+        if (params.has('lite')) localStorage.setItem(KEY, params.get('lite') === '0' ? '0' : '1');
+        if (localStorage.getItem(KEY) === '1') root.classList.add('lite');
+      } catch (error) {
+        if (/[?&]lite(?!=0)/.test(location.search)) root.classList.add('lite');
+      }
+    })();
+  </script>
+
+  <!-- Fontes locais (Cormorant Garamond e Inter): funcionam sem internet -->
+  <link rel="stylesheet" href="css/fonts.css">
+
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Barra dourada no topo que mostra o progresso da rolagem -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <!-- Brilho dourado que segue o mouse (desligado no modo leve) -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <!-- Fundo animado do site inteiro (partículas, notas e ondas) desenhado pelo js/hero.js -->
+  <canvas class="bg-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+
+  <!-- ===================== MENU ===================== -->
+  <header class="nav" id="nav">
+    <a href="#inicio" class="nav__logo gold-text">Synthesis</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+    <nav class="nav__links" id="navLinks">
+      <a href="#projeto">Projeto</a>
+      <a href="#piano">Piano</a>
+      <a href="#historia">História</a>
+      <a href="#som">O Som</a>
+      <a href="#acordes">Acordes</a>
+      <button class="nav__lite" id="liteToggle" type="button" aria-pressed="false">Modo leve</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===================== INÍCIO (HERO) ===================== -->
+    <section class="hero" id="inicio">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Projeto Semestral · Música &amp; Tecnologia</p>
+        <!-- O js/main.js separa cada letra para animar uma por uma -->
+        <h1 class="hero__title" id="heroTitle">Synthesis</h1>
+        <p class="hero__subtitle">Onde a música encontra a tecnologia.</p>
+        <p class="hero__description">
+          Um piano tocável, a história da música e a física do som.
+        </p>
+        <div class="hero__actions">
+          <a href="#piano" class="btn btn--gold">Tocar o piano</a>
+          <a href="#historia" class="btn btn--ghost">Explorar</a>
+        </div>
+      </div>
+
+      <a href="#projeto" class="hero__scroll" aria-label="Rolar para baixo">
+        <span>Role</span><i></i>
+      </a>
+    </section>
+
+    <!-- ===================== 01 · PROJETO ===================== -->
+    <section class="section section--alt" id="projeto">
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__number">01</span>
+          <h2 class="section__title">O Projeto <em class="gold-text">Synthesis</em></h2>
+          <p class="section__lead">Por trás do site.</p>
+        </header>
+
+        <div class="project">
+          <div class="project__text reveal">
+            <p>
+              Synthesis é o nosso projeto para a Expotech: um <em>case mod</em> que transforma um
+              piano digital na carcaça de um computador. Dentro dele roda um Windows Server com uma
+              máquina virtual Ubuntu, e é essa máquina que hospeda o site que você está vendo agora.
+              Este site está rodando de dentro do piano.
+            </p>
+            <p>
+              Nosso objetivo é misturar arte musical e tecnologia. O piano deixa de ser só
+              instrumento e vira também servidor, e o site leva essa mistura adiante: um piano
+              tocável, a história da música e a física do som, tudo criado com código.
+            </p>
+            <ul class="project__facts">
+              <li><span>Tema</span><span>Música</span></li>
+              <li><span>Tecnologias</span><span>HTML · CSS · JavaScript · Web Audio API</span></li>
+              <li><span>Evento</span><span>Expotech</span></li>
+              <li><span>Hospedagem</span><span>Windows Server → VM Ubuntu</span></li>
+              <li><span>Semestre</span><span>2º semestre · 2026</span></li>
+              <li><span>Sala</span><span>CDC-2NA</span></li>
+            </ul>
+          </div>
+
+          <div class="gallery" data-stagger>
+            <figure class="gallery__item gallery__item--large reveal">
+              <div class="gallery__placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span><code>img/projeto-1.jpg</code></span>
+              </div>
+              <img src="img/projeto-1.jpg" alt="Foto do projeto Synthesis" loading="lazy" onerror="this.remove()">
+              <figcaption>PLACEHOLDER</figcaption>
+            </figure>
+            <figure class="gallery__item reveal">
+              <div class="gallery__placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span><code>img/projeto-2.jpg</code></span>
+              </div>
+              <img src="img/projeto-2.jpg" alt="Foto do projeto Synthesis" loading="lazy" onerror="this.remove()">
+              <figcaption>PLACEHOLDER</figcaption>
+            </figure>
+            <figure class="gallery__item reveal">
+              <div class="gallery__placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span><code>img/projeto-3.jpg</code></span>
+              </div>
+              <img src="img/projeto-3.jpg" alt="Foto do projeto Synthesis" loading="lazy" onerror="this.remove()">
+              <figcaption>PLACEHOLDER</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <h3 class="subsection__title reveal">A <em class="gold-text">Máquina</em></h3>
+        <p class="specs__lead reveal">O computador que vive dentro do piano.</p>
+        <!-- Gabinete ainda não definido -->
+        <div class="specs" data-stagger>
+          <article class="spec-card reveal">
+            <span class="spec-card__label">Processador</span>
+            <h4 class="spec-card__name">Intel Core i5-3470</h4>
+            <ul class="spec-card__details">
+              <li>4 núcleos / 4 threads</li>
+              <li>3,20 GHz (3,60 GHz Turbo)</li>
+              <li>6 MB de cache</li>
+              <li>Soquete LGA 1155</li>
+            </ul>
+          </article>
+          <article class="spec-card reveal">
+            <span class="spec-card__label">Placa-mãe</span>
+            <h4 class="spec-card__name">GBT H61MHVD3</h4>
+            <ul class="spec-card__details">
+              <li>Chipset Intel H61</li>
+              <li>Soquete LGA 1155</li>
+              <li>Formato M-ATX</li>
+              <li>Memória DDR3</li>
+            </ul>
+          </article>
+          <article class="spec-card reveal">
+            <span class="spec-card__label">Memória</span>
+            <h4 class="spec-card__name">8 GB DDR3</h4>
+            <ul class="spec-card__details">
+              <li>Infinity Memory</li>
+              <li>1600 MHz</li>
+            </ul>
+          </article>
+          <article class="spec-card reveal">
+            <span class="spec-card__label">Cooler</span>
+            <h4 class="spec-card__name">Pure Power C90</h4>
+            <ul class="spec-card__details">
+              <li>Ventoinha de 90 mm</li>
+              <li>Compatível Intel / AMD</li>
+            </ul>
+          </article>
+          <article class="spec-card reveal">
+            <span class="spec-card__label">Armazenamento</span>
+            <h4 class="spec-card__name">HD 250 GB</h4>
+            <ul class="spec-card__details">
+              <li>Interface SATA</li>
+            </ul>
+          </article>
+          <article class="spec-card reveal">
+            <span class="spec-card__label">Fonte</span>
+            <h4 class="spec-card__name">Nvinet 500 W</h4>
+            <ul class="spec-card__details">
+              <li>Padrão ATX</li>
+              <li>80 Plus Bronze</li>
+              <li>Bivolt</li>
+              <li>Ventoinha de 12 cm</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 · PIANO ===================== -->
+    <section class="section" id="piano">
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__number">02</span>
+          <h2 class="section__title">O <em class="gold-text">Piano</em></h2>
+          <p class="section__lead">
+            Toque com o mouse, com o dedo ou com o teclado do computador.
+            Cada som é gerado em tempo real, sem nenhum arquivo de áudio.
+          </p>
+        </header>
+
+        <div class="piano reveal">
+          <div class="piano__top">
+            <div class="piano__display">
+              <span class="piano__note" id="pianoNote">—</span>
+              <span class="piano__note-name" id="pianoNoteName">Toque uma tecla</span>
+            </div>
+            <!-- Visualizador de ondas: mostra o som em tempo real -->
+            <canvas class="piano__visualizer" id="pianoVisualizer" aria-hidden="true"></canvas>
+          </div>
+
+          <div class="piano__controls">
+            <div class="control-group">
+              <span class="control-label">Demonstração</span>
+              <button class="chip" data-song="furElise">Für Elise</button>
+              <button class="chip" data-song="odeToJoy">Ode à Alegria</button>
+              <button class="chip" data-song="twinkle">Brilha, Brilha</button>
+            </div>
+            <div class="control-group">
+              <span class="control-label">Gravação</span>
+              <button class="chip chip--record" id="recordBtn">● Gravar</button>
+              <button class="chip" id="playRecordingBtn" disabled>▶ Reproduzir</button>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="volume">Volume</label>
+              <input type="range" id="volume" min="0" max="1" step="0.01" value="0.7">
+            </div>
+            <div class="control-group">
+              <label class="toggle">
+                <input type="checkbox" id="showLabels" checked>
+                <span class="toggle__track"></span>
+                <span>Mostrar teclas</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- O teclado é montado pelo js/keyboard.js -->
+          <div class="keyboard-scroll">
+            <div class="keyboard keyboard--main" id="mainKeyboard"></div>
+          </div>
+
+          <p class="piano__hint">
+            Linha de baixo <kbd>Z</kbd> a <kbd>M</kbd> · linha de cima <kbd>Q</kbd> a <kbd>I</kbd> ·
+            teclas pretas em <kbd>S</kbd> <kbd>D</kbd> <kbd>G</kbd> <kbd>H</kbd> <kbd>J</kbd> e nos números
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 03 · HISTÓRIA ===================== -->
+    <section class="section section--alt" id="historia">
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__number">03</span>
+          <h2 class="section__title">Uma História da <em class="gold-text">Música</em></h2>
+          <p class="section__lead">Quatro séculos de música em oito momentos.</p>
+        </header>
+
+        <div class="timeline" id="timeline">
+          <div class="timeline__line"><span class="timeline__progress" id="timelineProgress"></span></div>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">1600 — 1750</span>
+              <h3>Barroco</h3>
+              <p>Ornamentos, contraponto e o nascimento da ópera. O cravo e o órgão dominavam, e o baixo contínuo sustentava as harmonias.</p>
+              <ul class="timeline__names"><li>J. S. Bach</li><li>Vivaldi</li><li>Handel</li></ul>
+            </div>
+          </article>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">1750 — 1820</span>
+              <h3>Clássico</h3>
+              <p>Clareza, equilíbrio e forma. Nasce a sinfonia moderna e o pianoforte começa a substituir o cravo.</p>
+              <ul class="timeline__names"><li>Mozart</li><li>Haydn</li><li>Beethoven</li></ul>
+            </div>
+          </article>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">1820 — 1900</span>
+              <h3>Romântico</h3>
+              <p>Emoção acima de tudo. O piano vira o instrumento-estrela, com virtuoses lotando salas de concerto pela Europa.</p>
+              <ul class="timeline__names"><li>Chopin</li><li>Liszt</li><li>Tchaikovsky</li></ul>
+            </div>
+          </article>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">1910 — hoje</span>
+              <h3>Jazz</h3>
+              <p>Nascido em Nova Orleans da mistura de blues, ragtime e tradições africanas. A palavra-chave é improvisação.</p>
+              <ul class="timeline__names"><li>Louis Armstrong</li><li>Duke Ellington</li><li>Miles Davis</li></ul>
+            </div>
+          </article>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">1950 — hoje</span>
+              <h3>Rock</h3>
+              <p>Guitarras elétricas, atitude e rebeldia. Do rock'n'roll dos anos 50 aos shows em estádios lotados.</p>
+              <ul class="timeline__names"><li>Chuck Berry</li><li>The Beatles</li><li>Queen</li></ul>
+            </div>
+          </article>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">1958 — hoje</span>
+              <h3>Bossa Nova</h3>
+              <p>O Brasil mostra ao mundo um samba sofisticado, com harmonias do jazz e um violão quase sussurrado.</p>
+              <ul class="timeline__names"><li>Tom Jobim</li><li>João Gilberto</li><li>Vinicius de Moraes</li></ul>
+            </div>
+          </article>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">1970 — hoje</span>
+              <h3>Eletrônica</h3>
+              <p>Sintetizadores e computadores viram instrumentos. O som passa a ser criado do zero, exatamente como neste site.</p>
+              <ul class="timeline__names"><li>Kraftwerk</li><li>Jean-Michel Jarre</li><li>Daft Punk</li></ul>
+            </div>
+          </article>
+
+          <article class="timeline__item reveal">
+            <span class="timeline__dot"></span>
+            <div class="timeline__card">
+              <span class="timeline__date">2000 — hoje</span>
+              <h3>Era Digital</h3>
+              <p>Streaming, estúdios caseiros e algoritmos. Qualquer pessoa com um computador pode compor, gravar e publicar para o mundo.</p>
+              <ul class="timeline__names"><li>Streaming</li><li>Home studio</li><li>Música e IA</li></ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 04 · FÍSICA DO SOM ===================== -->
+    <section class="section" id="som">
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__number">04</span>
+          <h2 class="section__title">A Física do <em class="gold-text">Som</em></h2>
+          <p class="section__lead">Todo som é uma onda. Mexa nos controles e veja (e ouça) o que acontece.</p>
+        </header>
+
+        <div class="wave-lab reveal">
+          <div class="wave-lab__screen">
+            <!-- Desenho da onda feito pelo js/sound-wave.js -->
+            <canvas class="wave-lab__canvas" id="waveCanvas" aria-hidden="true"></canvas>
+            <div class="wave-lab__readout">
+              <span class="wave-lab__freq" id="waveFreq">440.0 Hz</span>
+              <span class="wave-lab__note" id="waveNote">≈ Lá (A4)</span>
+            </div>
+          </div>
+
+          <div class="wave-lab__controls">
+            <label class="slider-field">
+              <span class="control-label">Frequência (agudo / grave)</span>
+              <input type="range" id="freqSlider" min="0" max="1000" step="1" value="500">
+            </label>
+            <label class="slider-field">
+              <span class="control-label">Amplitude (volume)</span>
+              <input type="range" id="ampSlider" min="0" max="1" step="0.01" value="0.6">
+            </label>
+
+            <div class="slider-field">
+              <span class="control-label">Timbre (forma da onda)</span>
+              <div class="chip-row" id="waveTypes">
+                <button class="chip is-active" data-type="sine">Senoidal</button>
+                <button class="chip" data-type="triangle">Triangular</button>
+                <button class="chip" data-type="square">Quadrada</button>
+                <button class="chip" data-type="sawtooth">Dente de serra</button>
+              </div>
+            </div>
+            <div class="slider-field">
+              <span class="control-label">Oitavas do Lá</span>
+              <div class="chip-row" id="wavePresets">
+                <button class="chip" data-freq="220">Lá 220 Hz</button>
+                <button class="chip" data-freq="440">Lá 440 Hz</button>
+                <button class="chip" data-freq="880">Lá 880 Hz</button>
+              </div>
+            </div>
+
+            <div class="wave-lab__actions">
+              <button class="btn btn--gold" id="wavePlay">▶ Ouvir a onda</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-grid" data-stagger>
+          <article class="info-card reveal">
+            <span class="info-card__symbol">Hz</span>
+            <h3>Frequência</h3>
+            <p>Quantas vezes por segundo o ar vibra. Mais vibrações, som mais agudo. O Lá central vibra 440 vezes por segundo.</p>
+          </article>
+          <article class="info-card reveal">
+            <span class="info-card__symbol">dB</span>
+            <h3>Amplitude</h3>
+            <p>A "altura" da onda. Quanto maior, mais energia ela carrega e mais alto o som que percebemos.</p>
+          </article>
+          <article class="info-card reveal">
+            <span class="info-card__symbol">∿</span>
+            <h3>Timbre</h3>
+            <p>O formato da onda. É por isso que piano e violino soam diferentes tocando a mesma nota.</p>
+          </article>
+          <article class="info-card reveal">
+            <span class="info-card__symbol">×2</span>
+            <h3>Oitava</h3>
+            <p>Dobre a frequência e você ouve a mesma nota, mais aguda. 220, 440 e 880 Hz são todos Lá.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 05 · ACORDES ===================== -->
+    <section class="section section--alt" id="acordes">
+      <div class="container">
+        <header class="section__header reveal">
+          <span class="section__number">05</span>
+          <h2 class="section__title">A Arte dos <em class="gold-text">Acordes</em></h2>
+          <p class="section__lead">
+            Notas tocadas juntas formam acordes, a base da harmonia.
+            Clique para ouvir e ver o desenho de cada um no teclado.
+          </p>
+        </header>
+
+        <div class="chords">
+          <!-- Botões criados pelo js/chords.js -->
+          <div class="chords__buttons reveal" id="chordButtons"></div>
+
+          <div class="chords__stage reveal">
+            <div class="chords__info" id="chordInfo">
+              <h3 class="chords__name" id="chordName">Escolha um acorde</h3>
+              <p class="chords__formula" id="chordFormula">Cada acorde é um conjunto de notas que soam ao mesmo tempo.</p>
+              <div class="chords__notes" id="chordNotes"></div>
+            </div>
+            <div class="keyboard keyboard--mini" id="chordKeyboard"></div>
+          </div>
+
+          <div class="chords__progression reveal">
+            <p>A progressão mais famosa da música pop: <strong>I – V – vi – IV</strong></p>
+            <button class="btn btn--ghost" id="progressionBtn">▶ Tocar C – G – Am – F</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CITAÇÃO ===================== -->
+    <section class="quote">
+      <blockquote class="reveal">
+        Sem a música, a vida seria um erro.
+        <cite>Friedrich Nietzsche</cite>
+      </blockquote>
+    </section>
+  </main>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer class="footer">
+    <p class="footer__logo gold-text">Synthesis</p>
+    <p class="footer__tagline">Onde a música encontra a tecnologia.</p>
+    <ul class="footer__tech">
+      <li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>Web Audio API</li><li>Windows Server</li><li>Ubuntu</li>
+    </ul>
+    <p class="footer__copy">© <span id="year">2026</span> Projeto Synthesis · Projeto semestral</p>
+  </footer>
+
+  <!-- Scripts: a ordem importa (audio e keyboard são usados pelos outros) -->
+  <script src="js/audio.js"></script>
+  <script src="js/keyboard.js"></script>
+  <script src="js/hero.js"></script>
+  <script src="js/piano.js"></script>
+  <script src="js/sound-wave.js"></script>
+  <script src="js/chords.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
