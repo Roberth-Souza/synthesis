@@ -155,7 +155,9 @@ numa rede local sem internet, como a do evento.
 ## 📦 Requisitos
 
 - **Navegador moderno:** Chrome, Firefox ou Edge.
-- **Python 3** *(opcional)*: só se quiser servir o site localmente.
+- **Python 3** *(opcional)*: só para a opção 2 de [Como rodar](#-como-rodar), que sobe um
+  servidor local e deixa outros aparelhos da rede abrirem o site. Para abrir o `index.html`
+  direto, não precisa.
 
 Não há nada para instalar e nenhuma dependência.
 
@@ -171,7 +173,7 @@ Abra o `index.html` no navegador.
 
 ```fish
 # na raiz do projeto
-python -m http.server 8000
+python3 -m http.server 8000
 ```
 
 Depois acesse <http://localhost:8000>.
