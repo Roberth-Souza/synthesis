@@ -15,6 +15,10 @@ Tudo feito com código, sem nenhum arquivo de áudio.
 ![Web Audio API](https://img.shields.io/badge/Web%20Audio%20API-black)
 ![Offline](https://img.shields.io/badge/funciona-offline-black)
 
+![Windows Server 2022](https://img.shields.io/badge/Windows%20Server-2022-black)
+![IIS](https://img.shields.io/badge/IIS-black)
+![ngrok](https://img.shields.io/badge/ngrok-black?logo=ngrok)
+
 </div>
 
 ---
@@ -33,10 +37,11 @@ O **Synthesis** é um site estático feito para acompanhar o case mod de mesmo n
 piano digital vira a carcaça de um computador. É o nosso projeto semestral para a
 **ExpoTech do 2º semestre de 2026**.
 
-O site é **servido de dentro do próprio piano**: o PC instalado nele roda um **Windows Server**
-com uma **VM Ubuntu**, e é essa VM que hospeda o site na rede local durante o evento. Quem
-estiver visitando abre o site e toca o piano no navegador enquanto o piano de verdade é o
-servidor.
+O site é **servido de dentro do próprio piano**: o PC instalado nele roda uma **máquina virtual
+com Windows Server 2022**, e é essa VM que hospeda o site no **IIS**. O **ngrok** gera um link
+público para o servidor e um **QR Code** leva até ele. Quem estiver visitando aponta o celular,
+abre o site e toca o piano no navegador enquanto o piano de verdade é o servidor
+(veja [Hospedagem no evento](#-hospedagem-no-evento)).
 
 O site junta música e tecnologia em cinco seções:
 
@@ -135,8 +140,8 @@ O site também respeita a opção **reduzir movimento** do sistema (`prefers-red
 
 ### 📡 Funciona offline
 
-As fontes ficam na pasta `fonts/` e o site **não faz nenhuma requisição externa**. Ele roda
-numa rede local sem internet, como a do evento.
+As fontes ficam na pasta `fonts/` e o site **não faz nenhuma requisição externa**. Ele abre
+numa máquina sem internet; só o acesso pelo link do ngrok precisa de conexão.
 
 ---
 
@@ -148,7 +153,25 @@ numa rede local sem internet, como a do evento.
 - **Web Audio API:** síntese de todo o som
 - **Canvas 2D:** fundo animado, visualizador do piano e laboratório de ondas
 
-**Infraestrutura do evento:** Windows Server → VM Ubuntu, servindo o site na rede local.
+**Hospedagem:** Windows Server 2022 (máquina virtual) · IIS · ngrok
+
+---
+
+## 🌐 Hospedagem no evento
+
+Na ExpoTech, o site roda numa **máquina virtual com Windows Server 2022**, criada no
+**VirtualBox** e instalada no PC que fica dentro do piano.
+
+```
+QR Code → link do ngrok → VM Windows Server 2022 → IIS → arquivos do site
+```
+
+- **Windows Server 2022:** sistema da máquina virtual que funciona como servidor.
+- **IIS:** o servidor web do Windows Server, que entrega os arquivos do site
+  (`index.html`, `css/`, `js/`, `fonts/`, `img/`).
+- **ngrok:** cria um link público que aponta para o IIS da VM, assim o site abre em qualquer
+  aparelho com internet, sem precisar estar na mesma rede.
+- **QR Code:** leva até o link do ngrok. O visitante aponta a câmera do celular e já cai no site.
 
 ---
 
