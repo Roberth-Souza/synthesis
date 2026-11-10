@@ -224,7 +224,7 @@ synthesis/
 │   └── main.js         # menu, animações ao rolar, barra de progresso, brilho do cursor e modo leve
 ├── fonts/              # Cormorant Garamond e Inter em .woff2 + textos da licença (OFL-*.txt)
 ├── img/                # favicon
-└── docs/               # logo e screenshot deste README
+└── docs/               # logo, screenshot e documentação em PDF
 ```
 
 > Os scripts são carregados em ordem no fim do `index.html`. `audio.js` e `keyboard.js`
