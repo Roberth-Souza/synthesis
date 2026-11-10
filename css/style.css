@@ -1038,6 +1038,50 @@ main, .footer { position: relative; z-index: 1; }
   transition: transform 0.5s var(--ease);
 }
 .gallery__item:hover figcaption { transform: none; }
+.gallery__item img,
+.gallery__item figcaption { cursor: zoom-in; }
+.gallery__item img:focus-visible { outline: 2px solid var(--gold); outline-offset: -4px; }
+
+/* Foto ampliada (a animação fica em js/gallery.js) */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  overflow: hidden;
+  background: transparent;
+  color: var(--text);
+  cursor: zoom-out;
+}
+.lightbox::backdrop { background: transparent; }
+.lightbox__backdrop { position: absolute; inset: 0; background: rgba(8, 8, 10, 0.94); }
+.lightbox__image { position: absolute; border-radius: 8px; }
+.lightbox__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0 1.5rem;
+  font-size: 0.95rem;
+  text-align: center;
+  color: var(--gold-light);
+}
+.lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--gold-light);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
 
 .subsection__title {
   margin-bottom: 2.5rem;
@@ -1237,7 +1281,7 @@ main, .footer { position: relative; z-index: 1; }
 /* ---------- 20. Modo leve (para computadores fracos ou sem placa de vídeo) ----------
    Ligado pela classe .lite no <html> (botão do menu ou ?lite na URL).
    Corta todas as animações e os efeitos que pesam no processador. */
-/* Smooth scroll stays on in lite mode: it is cheap and the site feels broken without it */
+/* A rolagem suave continua ligada no modo leve: custa pouco e o site fica estranho sem ela */
 
 /* Animações terminam na hora (quem começa invisível já aparece no estado final) e nada desliza */
 .lite *,
